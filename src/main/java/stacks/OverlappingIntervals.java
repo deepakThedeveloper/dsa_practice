@@ -17,6 +17,8 @@ public class OverlappingIntervals {
     }
 
     private static int[][] getScheduleRevision1(int[][] a){
+        Comparator<int[]> comparator = (o1, o2)->Integer.compare(o1[0], o2[0]);
+        Arrays.sort(a, comparator);
         Arrays.sort(a, Comparator.comparingInt(o -> o[0]));
         System.out.println();
         System.out.println("sorting");

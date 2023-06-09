@@ -1,77 +1,72 @@
 package graphs;
 
+import javafx.util.Pair;
 import lombok.AllArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.PriorityQueue;
+import java.util.*;
 
-//technical difference between dijikstra's and prims is while traversing in dijikstra previous edge wt and path is addedd to
-// current, but in case of prims, previous wt and path is not added to current. Rest all the navigation and code is same as dijikstra
+//technical difference between dijkstra's and prims is while traversing in dijikstra previous edge wt and path is added to
+// current, but in case of prims, previous wt and path is not added to current. Rest all the navigation and code is same as dijkstra
+// It is used to find out minimum spanning tree
 public class PrimsAlgo {
     public static void main(String[] args) {
-        int vertices = 7;
-        ArrayList<Edge>[] graph = Util.getEdges(vertices);
-        int sr = 0;
-        int de = 6;
-
-        primsViaBFS(graph, sr, de, new boolean[vertices]);
-
-        boolean[] visited =  new boolean[vertices];
-        visited[sr] = true;
-        int wtCount1 = shortestPathViaDFS(graph, sr, de, visited, 0);
-        System.out.println("shortest path via dfs"+finalPath+" wt:"+wtCount1);
+        int vertices = 5, sr = 0;
+        List<List<javafx.util.Pair<Integer, Integer>>> graph = undirectedWtGraph(vertices);
+        primsViaBFS(graph, sr, new boolean[vertices]);
     }
 
-    //rm*wa*
-    private static List<Integer> primsViaBFS(ArrayList<Edge>[] edges, int sr, int de, boolean[] visited){
-        PriorityQueue<Pair> queue = new PriorityQueue<Pair>(Comparator.comparingInt(p->p.weight));
-        queue.add(new Pair(sr, 0, -1));
-        List<Integer> path = new ArrayList<>();
+    private static void primsViaBFS(List<List<Pair<Integer, Integer>>> edges, int sr, boolean[] visited){
+        PriorityQueue<Data> queue = new PriorityQueue<>(Comparator.comparingInt(p->p.weight));
+        queue.add(new Data(sr, 0, -1));
+        List<List<Integer>> mst = new ArrayList<>();
+        int sum = 0;
 
         while(!queue.isEmpty()){
-            Pair pair = queue.remove();
-            int src = pair.sr;
+            Data data = queue.remove();
+            int src = data.sr;
             if(visited[src]) continue;
+            sum++;
             visited[src] = true;
-            if(pair.path!=-1)
-            System.out.println(""+src+"-"+pair.path+"@"+pair.weight);
-
-            for(Edge ed : edges[src]){
-                if(visited[ed.getDes()]) continue;
-                queue.add(new Pair(ed.getDes(), ed.getWt(), pair.sr));
+            if(data.parent !=-1) {
+                mst.add(Arrays.asList(src, data.parent));
+            }
+            for(Pair<Integer, Integer> nbr : edges.get(src)){
+                int curNode = nbr.getKey();
+                int curWt = nbr.getValue();
+                if(visited[curNode]) continue;
+                queue.add(new Data(curNode, curWt, src));
             }
         }
-        return path;
-    }
-
-    static List<Integer> finalPath = new ArrayList<>();
-
-    //todo: once dfs of dijikstra is completed will fix this.
-    private static int shortestPathViaDFS(ArrayList<Edge>[] graph, int sr, int des, boolean[] visited, int currWt){
-        if(sr == des) return 0;
-
-        int finalWt = Integer.MAX_VALUE;
-
-        for(Edge edge : graph[sr]){
-            if(visited[edge.getDes()]) continue;
-
-            visited[edge.getDes()] = true;
-           // finalPath.add(edge.getDes());
-            int wt = shortestPathViaDFS(graph, edge.getDes(), des, visited, edge.getWt());
-            //finalPath.remove(finalPath.size()-1);
-            //finalPath.add(sr);
-            finalWt = Math.min((wt+edge.getWt()), finalWt);
-            visited[edge.getDes()] = false;
-        }
-        return finalWt;
+        System.out.println("sum of mst:"+sum);
+        System.out.println("mst:"+ mst);
     }
 
     @AllArgsConstructor
-    static class Pair{
+    static class Data {
         int sr;
         int weight;
-        int path;
+        int parent;
+    }
+
+    private static List<List<Pair<Integer, Integer>>> undirectedWtGraph(int vertex){
+        List<List<Pair<Integer, Integer>>> graph = new ArrayList<>();
+        for(int i=0; i<vertex; i++){
+            graph.add(new ArrayList<>());
+        }
+
+        graph.get(0).add(new Pair<>(1, 2));
+        graph.get(1).add(new Pair<>(0, 2));
+        graph.get(0).add(new Pair<>(2, 1));
+        graph.get(2).add(new Pair<>(0, 1));
+        graph.get(2).add(new Pair<>(1, 1));
+        graph.get(1).add(new Pair<>(2, 1));
+        graph.get(2).add(new Pair<>(4, 2));
+        graph.get(4).add(new Pair<>(2, 2));
+        graph.get(2).add(new Pair<>(3, 2));
+        graph.get(3).add(new Pair<>(2, 2));
+        graph.get(3).add(new Pair<>(4, 1));
+        graph.get(4).add(new Pair<>(3, 1));
+
+        return graph;
     }
 }

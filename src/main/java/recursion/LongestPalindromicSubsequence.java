@@ -2,10 +2,12 @@ package recursion;
 
 public class LongestPalindromicSubsequence {
     public static void main(String[] args) {
-        String s1 = "bbabcbcab";
+        String s1 = "abccbc";
 
         int lps = lps(s1, s1.length() - 1, reverse(s1), s1.length() - 1);
         System.out.println("recursion:"+lps);
+        int lps1 = getPalindromicSubsequenceBetterApproach(s1.toCharArray(), 0, s1.length() - 1);
+        System.out.println("recursion:"+lps1);
     }
 
     private static String reverse(String s1){
@@ -29,5 +31,18 @@ public class LongestPalindromicSubsequence {
             return 1 + lps(s1, i1 - 1, s2, i2 - 1);
         }
         return Math.max(lps(s1, i1 - 1, s2, i2), lps(s1, i1, s2, i2 - 1));
+    }
+
+    private static int getPalindromicSubsequenceBetterApproach(char[] c1, int i, int j){
+        if(i>j) return 0;
+        if(i==j) return 1;
+        if(c1[i] == c1[j]){
+            return 2 + getPalindromicSubsequenceBetterApproach(c1, i+1, j-1);
+        }
+
+        int l1 = getPalindromicSubsequenceBetterApproach(c1, i+1, j);
+        int l2 = getPalindromicSubsequenceBetterApproach(c1, i, j-1);
+
+        return Math.max(l1, l2);
     }
 }

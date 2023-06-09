@@ -29,7 +29,7 @@ public class MergeSortOnLinkedList {
         Node1 rightList = mergeSortOnLinkedList(mid.next, tail);
 
         if(leftList != null && rightList !=null) {
-            Node1 newNode =  MergeTwoSortedLinkedList.mergeSortedLinkedList(leftList, rightList);
+            Node1 newNode =  MergeTwoSortedLinkedList.mergeSortedLinkedListIteration(leftList, rightList);
         }
         return null;
     }

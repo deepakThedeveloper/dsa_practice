@@ -5,15 +5,48 @@ public class MergeTwoSortedLinkedList {
         Node1 firstNode = getFirstNode();
         Node1 secondNode = getSecondNode();
 
+        Node1 newHead = mergeSotedLLRecursion(firstNode, secondNode);
+        Util.traverseSingly(newHead);
 
-        Node1 newNode = mergeSortedLinkedList(firstNode, secondNode);
-        /*while(newNode!=null){
-            System.out.print(newNode.val+" --> ");
-            newNode = newNode.next;
-        }*/
+//        Node1 newNode = mergeSortedLinkedListIteration(firstNode, secondNode);
+//        Util.traverseSingly(newNode);
     }
 
-    public static Node1 mergeSortedLinkedList(Node1 firstNode, Node1 secondNode) {
+    public static Node1 mergeSortedLLApproach2Better(Node1 n1, Node1 n2){
+        if(n1==null || n2==null) return n1!=null ? n1 : n2;
+        Node1 dummy = new Node1(-1);
+        Node1 prev = dummy;
+        Node1 c1 = n1, c2 = n2; // best practice to not traverse with head pointers
+        while(c1!=null && c2!=null){
+            if(c1.val < c2.val){
+                prev.next = c1;
+                c1 = c1.next;
+            }
+            else{
+                prev.next = c2;
+                c2 = c2.next;
+            }
+            prev = prev.next;
+        }
+
+        prev.next = c1!=null ? c1 : c2;
+        return dummy.next;
+    }
+    private static Node1 mergeSotedLLRecursion(Node1 n1, Node1 n2){
+        if(n1==null && n2!=null) return n2;
+        if(n2==null && n1!=null) return n1;
+
+        if(n1.val < n2.val){
+            n1.next = mergeSotedLLRecursion(n1.next, n2);
+            return n1;
+        }
+        else{
+            n2.next = mergeSotedLLRecursion(n1, n2.next);
+            return n2;
+        }
+    }
+
+    public static Node1 mergeSortedLinkedListIteration(Node1 firstNode, Node1 secondNode) {
         Node1 p1 = firstNode;
         Node1 p2 = secondNode;
 
@@ -52,29 +85,18 @@ public class MergeTwoSortedLinkedList {
     }
 
     private static Node1 getFirstNode() {
-        Node1 node1 = new Node1(77);
-        Node1 node2 = new Node1(47, node1);
-        Node1 node3 = new Node1(35, node2);
-        Node1 node4 = new Node1(22, node3);
-        Node1 node5 = new Node1(15, node4);
-        Node1 node6 = new Node1(12, node5);
-        Node1 head = new Node1(10, node6);
-
-        return head;
+        Node1 node5 = new Node1(9);
+        Node1 node4 = new Node1(7, node5);
+        Node1 node3 = new Node1(5, node4);
+        Node1 node2 = new Node1(3, node3);
+        Node1 node1 = new Node1(1, node2);
+        return node1;
     }
 
     private static Node1 getSecondNode() {
-        Node1 node1 = new Node1(65);
-        Node1 node2 = new Node1(51, node1);
-        Node1 node3 = new Node1(47, node2);
-        Node1 node4 = new Node1(39, node3);
-        Node1 node5 = new Node1(28, node4);
-        Node1 node6 = new Node1(25, node5);
-        Node1 node7 = new Node1(13, node6);
-        Node1 node8 = new Node1(11, node7);
-        Node1 head = new Node1(5, node8);
-
-        return head;
+        Node1 node3 = new Node1(6);
+        Node1 node2 = new Node1(4, node3);
+        Node1 node1 = new Node1(2, node2);
+        return node1;
     }
-
 }

@@ -14,6 +14,30 @@ public class BFSTraversal {
         int sr = 2;
         ArrayList<Edge>[] edges = Util.getEdges(vertices);
         bfsTraversal(edges, sr, vertices);
+
+        System.out.println("======================================");
+        List<List<Integer>> graph = Util.adjacencyList(vertices);
+        bfsUsingListOfList(graph, sr);
+    }
+
+    // sc: O(3N) and tc: O(N) + O(2E)  ---- 2E is twice of edges which is degree. i.e. degree = 2E because outer while loop is executing for n time and inner loop
+    // is for all the neighbour nodes
+    private static void bfsUsingListOfList(List<List<Integer>> graph, int sr){
+        Queue<Integer> queue = new LinkedList<>();
+        boolean[] visited = new boolean[graph.size()];
+        queue.add(sr);
+        visited[sr] = true;
+        while(!queue.isEmpty()){
+            Integer v = queue.poll();
+            System.out.print(v+" ");
+            List<Integer> nbrs = graph.get(v);
+            for(Integer nb : nbrs){
+                if(!visited[nb]) {
+                    visited[nb] = true;
+                    queue.add(nb);
+                }
+            }
+        }
     }
 
     private static void bfsTraversal(ArrayList<Edge>[] edges, int sr, int vertex){

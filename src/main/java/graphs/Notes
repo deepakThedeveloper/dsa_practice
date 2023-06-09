@@ -1,0 +1,8 @@
+1. BFS should be applied when
+-- level order traversal is needed
+-- simultaneous travel is needed
+-- when there are multiple source at same time to be started with
+-- need to move one step at a time
+-- need to move in multiple direction from one point e.g.: up right down left
+
+2. Where we are checking if(!visited[i][j]) on codition true set visited[i][j] = true in immediate next line

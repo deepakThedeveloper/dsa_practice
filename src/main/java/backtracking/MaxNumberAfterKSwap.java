@@ -3,7 +3,7 @@ package backtracking;
 public class MaxNumberAfterKSwap {
     public static void main(String[] args) {
         String str = "1234567";
-        int k = 1;
+        int k = 4;
 
         getMaxNumber(str, k);
         System.out.println(max);
@@ -21,7 +21,6 @@ public class MaxNumberAfterKSwap {
         for(int i=0; i<str.length()-1; i++) {
             for (int j = i+1; j < str.length(); j++) {
                 if(str.charAt(j)>str.charAt(i)){
-                    //String swapped = swap(str, i, j);
                     str = swap(str, i, j);
                     getMaxNumber(str, k-1);
                     str = swap(str, i, j);

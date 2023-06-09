@@ -1,6 +1,8 @@
 package recursion;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,34 +25,62 @@ import java.util.Map;
  * 4. add remaining char the other half in reverse order of permutated string.
  * 5. if any odd char is remaining then put it in between of two join strings
  */
-//todo
 public class PalindromicStringPermutation {
     public static void main(String[] args) {
-        String s = "ababccc";
+        String s = "ababc";
+        palindromicPermutedString(s);
+    }
+
+    private static void palindromicPermutedString(String s){
         Map<Character, Integer> freqMap = new HashMap<>();
         for(int i=0; i<s.length(); i++){
             freqMap.put(s.charAt(i), freqMap.getOrDefault(s.charAt(i), 0)+1);
         }
-
-        String ip1 = "";
-        String ip2 = "";
-        int oddChar=0;
-        for(Map.Entry<Character, Integer> map : freqMap.entrySet()){
-
-            char c = map.getKey();
-            int value = map.getValue();
-            if(value % 2 !=0){
-                oddChar = c;
-                int val = Math.abs(value - value/2);
-                for(int i=0; i<val; i++)
-                    ip2 += c;
+        int odd = 0;
+        StringBuilder builder = new StringBuilder();
+        String oddChar="";
+        for(Map.Entry<Character, Integer> mp : freqMap.entrySet()){
+            int count = mp.getValue();
+            if(count%2!=0) {
+                oddChar = ""+mp.getKey();
+                odd++;
             }
-            for(int j=0; j<value/2; j++){
-                ip1 += c;
+            StringBuilder local = new StringBuilder();
+            char c = mp.getKey();
+            for(int i=0; i<count/2; i++){
+                local.append(c);
             }
+            builder.append(local.toString());
         }
-//        ip2 = oddChar!=0 ? ip1.ip1.indexOf(oddChar)+ip2;
-//        System.out.println(ip1);
-//        System.out.println(ip2);
+        String stringToBePermuted = builder.toString();
+        System.out.println(stringToBePermuted);
+        if(odd>1){
+            System.out.println("palindromic partition not possible as odd char are more than 1");
+        }
+        else {
+            getPermutation(stringToBePermuted, new boolean[stringToBePermuted.length()], "", oddChar);
+        }
+    }
+
+    private static void getPermutation(String str, boolean[] visited, String op, String c1){
+        if(op.length() == str.length()){
+            System.out.println(op+c1+reverse(op));
+            return;
+        }
+        for(int i=0; i<str.length(); i++){
+            if(visited[i]) continue;
+            visited[i]=true;
+            getPermutation(str, visited, op+str.charAt(i), c1);
+            visited[i]=false;
+        }
+    }
+    private static String reverse(String s){
+        char[] c = s.toCharArray();
+        for (int i = 0, j = c.length - 1; i < j; i++, j--) {
+            char c1 = c[i];
+            c[i] = c[j];
+            c[j] = c1;
+        }
+        return String.valueOf(c);
     }
 }

@@ -13,6 +13,27 @@ public class WildcardMatching {
 
         boolean matchString1 = matchStringTabulationRevision(s1, s2);
         System.out.println("tabulation:"+matchString1);
+
+        boolean matchString2 = wildcardMatchingApproach2(s1, s2);
+        System.out.println("approach2:"+matchString2);
+    }
+
+    private static boolean wildcardMatchingApproach2(String s1, String s2){
+        int n = s1.length();
+        int m = s2.length();
+        boolean[][] dp = new boolean[n+1][m+1];
+        dp[n-1][m-1] = true;
+        for(int i=n-2; i>=0; i--){
+            for(int j=n-2; j>=0; j--){
+                if(s1.charAt(i) == s2.charAt(j) || s1.charAt(i) == '?'){
+                    dp[i][j] = dp[i+1][j+1];
+                }
+                else if(s1.charAt(i) == '*'){
+                    dp[i][j] = dp[i+1][j] || dp[i][j+1];
+                }
+            }
+        }
+        return dp[0][0];
     }
 
     private static int matchStringMemoizationRevision(String s1, int i1, String s2, int i2, int[][] dp) {
@@ -35,6 +56,7 @@ public class WildcardMatching {
         return dp[i1][i2] = 0;
     }
 
+    //todo: notworking. incorrect output for String s1 = "bab*def"; String s2 = "abcdef";
     private static boolean matchStringTabulationRevision(String s1, String s2){
         int i1 = s1.length();
         int i2 = s2.length();

@@ -4,15 +4,15 @@ import java.util.Stack;
 
 public class MergeSortedLinkedList {
     public static void main(String[] args) {
-        Node1 node1 = new Node1(55);
-        Node1 node2 = new Node1(4, node1);
-        Node1 node3 = new Node1(3, node2);
-        Node1 node4 = new Node1(2, node3);
-        Node1 node5 = new Node1(1, node4);
+        Node1 node1 = new Node1(10);
+        Node1 node2 = new Node1(8, node1);
+        Node1 node3 = new Node1(6, node2);
+        Node1 node4 = new Node1(4, node3);
+        Node1 node5 = new Node1(2, node4);
 
-        Node1 node33 = new Node1(33);
-        Node1 node44 = new Node1(22, node33);
-        Node1 node55 = new Node1(12, node44);
+        Node1 node33 = new Node1(5);
+        Node1 node44 = new Node1(3, node33);
+        Node1 node55 = new Node1(1, node44);
 
         Node1 newNode = mergeList(node5, node55);
         while(newNode!=null){
