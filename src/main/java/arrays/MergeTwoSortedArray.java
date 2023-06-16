@@ -1,25 +1,66 @@
 package arrays;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class MergeTwoSortedArray {
     public static void main(String[] args) {
-        int a[] = {1,3,5,7};
+        int a[] = {1, 1, 2, 3,5,7};
         int b[] = {0,2,6,8,9};
-        /*int a[] = {5,6};
-        int b[] = {4,6};*/
+
 
         System.out.println("before merging");
         Arrays.stream(a).forEach(v -> System.out.print(v+" "));
         System.out.println();
         Arrays.stream(b).forEach(v -> System.out.print(v+" "));
 
+        List<Integer> result = mergeTwoSortedArrayAndReturnNewArray(a, b);
+        System.out.println("new sorted array:"+result);
         merge(a,b);
         System.out.println();
         System.out.println("after merging");
         Arrays.stream(a).forEach(v -> System.out.print(v+" "));
         System.out.println();
         Arrays.stream(b).forEach(v -> System.out.print(v+" "));
+    }
+
+    private static List<Integer> mergeTwoSortedArrayAndReturnNewArray(int[] a, int[] b){
+        int n = a.length, m = b.length;
+        List<Integer> result = new ArrayList<>();
+        int i=0, j=0, prev = -1;
+        for(; i<n && j<m;){
+            int v;
+            if(a[i]<=b[j]){
+                v = a[i];
+                i++;
+            }
+            else{
+                v= b[j];
+                j++;
+            }
+
+            if(prev==-1 || v != prev){
+                result.add(v);
+                prev = v;
+            }
+        }
+
+        while(i<n){
+            if(a[i]!=prev){
+                result.add(a[i]);
+                prev = a[i];
+            }
+            i++;
+        }
+        while(j<m){
+            if(b[j]!=prev){
+                result.add(b[j]);
+                prev = b[j];
+            }
+            j++;
+        }
+        return result;
     }
 
     private static void merge(int[] a, int[] b) {

@@ -4,7 +4,8 @@ import java.util.ArrayList;
 
 /*
 Given a string, the task is to find whether it contains an additive sequence or not.
-A string contains an additive sequence if its digits can make a sequence of numbers in which every number is addition of previous two numbers.
+A string contains an additive sequence if its digits can make a sequence of numbers in which
+every number is addition of previous two numbers.
 A valid string should contain at least three digit to make one additive sequence.
 
 Input : s = “235813”

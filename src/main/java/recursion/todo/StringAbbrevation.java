@@ -5,29 +5,19 @@ package recursion.todo;
  */
 public class StringAbbrevation {
     public static void main(String[] args) {
-        printAbbrevation("000","pep", "","");
+        String str = "pep";
+        printAbbrevation(str, 0, 0, str.length());
     }
 
-    // not able to get number greater than 2. i.e. p2 for 011 is not getting but instead getting p12. so need to look
-    // into string truncating logic
-    private static void printAbbrevation(String number, String str, String op, String op1){
-        if(number.length() == 0){
-            System.out.println(op +" "+ op1);
+    private static void printAbbrevation(String str, int idx, int noOfOnes, int originalSize){
+        if(idx==originalSize){
+            System.out.println(str);
             return;
         }
 
-        char newChar = str.charAt(0);
-        String newStr = number.substring(1);
-        String newStr1 = str.substring(1);
-        printAbbrevation(newStr, newStr1, op+"0", op1+newChar);
-        int count = 1;
-        int i=0;
-        for(i = op1.length()-1; i>=0; i--){
-            if(op1.charAt(i) == '1'){
-                count++;
-            }
-            else break;
-        }
-        printAbbrevation(newStr, newStr1, op+"1", op1+count);
+        printAbbrevation(str, idx+1, 0, originalSize);
+        String suffix = idx >= str.length() ? "" : str.substring(idx+1);
+        String newString =  str.substring(0, idx-noOfOnes)+ (1+noOfOnes) + suffix;
+        printAbbrevation(newString, idx+1, noOfOnes+1, originalSize);
     }
 }

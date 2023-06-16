@@ -1,20 +1,66 @@
 package arrays;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class LongestConsecutive {
     public static void main(String[] args) {
         int arr[]={100,200,105,11,15,12,14,13,9,10, 99,98,97,96,95,94,93,92,91,90};
-        //int lon= longestConsecutiveReadymadeCode(arr);
-       // int lon = bruteForceCode(arr);
-        int lon = optimizedSolution(arr);
-        System.out.println("The longest consecutive sequence is "+lon);
+//        int lon = optimizedSolution(arr);
+//        System.out.println("The longest consecutive sequence is "+lon);
+
+        int maxCount = findCountOfLargestConsecutiveSequence(arr);
+        System.out.println("largest consecutive subsequence count recursive:"+maxCount);
+
+        int maxCount1 = findCountOfLargestConsecutiveSequenceIterative(arr);
+        System.out.println("largest consecutive subsequence count iterative:"+maxCount1);
     }
 
-    //todo
-    private static int optimizedSolutionRevision(int[] arr) {return 0;}
+    private static int findCountOfLargestConsecutiveSequence(int[] arr) {
+        Map<Integer, Integer> valCountMap = new HashMap<>();
+        int n = arr.length;
+        for(int i=0; i<n; i++){
+            valCountMap.put(arr[i], 0);
+        }
+        int max = Integer.MIN_VALUE;
+        for(Map.Entry<Integer, Integer> map : valCountMap.entrySet()){
+            int count = map.getValue();
+            if(map.getValue()==0){
+                count = searchAndPopulateSequenceRecursive(map.getKey(), valCountMap);
+            }
+            max = Math.max(max, count);
+        }
+        return max;
+    }
+
+    private static int searchAndPopulateSequenceRecursive(int ele, Map<Integer, Integer> map){
+        if(!map.containsKey(ele)) return 0;
+        if(map.get(ele) != 0) return map.get(ele);
+
+        int count =  searchAndPopulateSequenceRecursive(ele+1, map) + 1;
+        map.put(ele, count);
+        return count;
+    }
+
+    private static int findCountOfLargestConsecutiveSequenceIterative(int[] arr) {
+        Set<Integer> elements = new HashSet<>();
+        int n = arr.length;
+        for(int i=0; i<n; i++){
+            elements.add(arr[i]);
+        }
+        int max = Integer.MIN_VALUE, count = 0;
+        for(Integer ele : elements){
+            if(elements.contains(ele-1)) continue;
+            int itr = ele;
+            count = 0;
+            while(elements.contains(itr)){
+                count++;
+                itr++;
+            }
+            max = Math.max(max, count);
+        }
+        return max;
+    }
+
 
     private static int optimizedSolution(int[] arr) {
         Map<Integer, Integer> vals = new HashMap<>();

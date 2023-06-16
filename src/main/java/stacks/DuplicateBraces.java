@@ -27,6 +27,6 @@ public class DuplicateBraces {
                 stack.push(c1);
             }
         }
-        return stack.isEmpty() ? false : true;
+        return !stack.isEmpty();
     }
 }

@@ -57,15 +57,15 @@ public class PartitionAnArray {
             }
         }
 
-        System.out.println("pivot:"+pivot);
-        Arrays.stream(a).forEach(v-> System.out.print(v+" "));
-        System.out.println();
+//        System.out.println("pivot:"+pivot);
+//        Arrays.stream(a).forEach(v-> System.out.print(v+" "));
+//        System.out.println();
 
         if(a[pivotPosition] == pivot){
-            System.out.println("pivot position:"+ pivotPosition);
+           // System.out.println("pivot position:"+ pivotPosition);
             return pivotPosition;
         }
-        System.out.println("pivot position:"+ i);
+        //System.out.println("pivot position:"+ i);
         return i;
     }
 

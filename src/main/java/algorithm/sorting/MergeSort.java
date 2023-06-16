@@ -2,7 +2,6 @@ package algorithm.sorting;
 
 import java.util.Arrays;
 
-//Todo
 public class MergeSort {
     public static void main(String[] args) {
         int[] a = {9,3,2,7,5,1,0,6,11,32,45,23,12,67,17};

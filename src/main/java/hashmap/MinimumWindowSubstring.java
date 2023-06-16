@@ -1,7 +1,5 @@
 package hashmap;
 
-import recursion.partition.PalindromePartitioning;
-
 import java.util.HashMap;
 import java.util.Map;
 

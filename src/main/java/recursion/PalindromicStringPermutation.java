@@ -27,53 +27,68 @@ import java.util.Map;
  */
 public class PalindromicStringPermutation {
     public static void main(String[] args) {
-        String s = "ababc";
-        palindromicPermutedString(s);
-    }
-
-    private static void palindromicPermutedString(String s){
+        String s = "aabbaabbccc";
         Map<Character, Integer> freqMap = new HashMap<>();
         for(int i=0; i<s.length(); i++){
             freqMap.put(s.charAt(i), freqMap.getOrDefault(s.charAt(i), 0)+1);
         }
-        int odd = 0;
-        StringBuilder builder = new StringBuilder();
-        String oddChar="";
-        for(Map.Entry<Character, Integer> mp : freqMap.entrySet()){
-            int count = mp.getValue();
-            if(count%2!=0) {
-                oddChar = ""+mp.getKey();
-                odd++;
+
+        palindromicPermutation(freqMap);
+    }
+
+    // time complexity: aabbaabbccc i.e. a4b4c3, we are doing half of its freq = a2b2c1 for permutation. in that as 'a' and 'b' as duplicates i.e. a2 and b2 its will be divided
+    // so a2b2c1 = 5 char so tc: 5!/2!*2! (5 is total char, 2! * 2! is for a2 and b2. it should be considered only once)
+    private static void palindromicPermutation(Map<Character, Integer> freqMap){
+        Character oddChar = null;
+        int oddCharCount = 0;
+        int length = 0;
+        for(Map.Entry<Character, Integer> map : freqMap.entrySet()){
+            int freq = map.getValue();
+            if(freq % 2 != 0){
+                oddChar = map.getKey();
+                oddCharCount ++;
             }
-            StringBuilder local = new StringBuilder();
-            char c = mp.getKey();
-            for(int i=0; i<count/2; i++){
-                local.append(c);
+            length += freq/2;
+            freqMap.put(map.getKey(), freq / 2);
+        }
+
+        if(oddCharCount > 1){
+            System.out.println("odd char count is > 1 so palindromic permutation is not possible");
+            return;
+        }
+
+        List<String> permutation = new ArrayList<>();
+        getPalindromicPermutations(oddChar, freqMap, permutation, "", length);
+
+        System.out.println("total permutations:"+permutation.size());
+        System.out.println(permutation);
+    }
+
+    private static void getPalindromicPermutations(Character oddChar, Map<Character, Integer> freqMap,
+                                                   List<String> permutations, String op, int strLen){
+        if(op.length() == strLen){
+            String reverse = reverse(op);
+            permutations.add(op+oddChar+reverse);
+            return;
+        }
+
+        for(Map.Entry<Character, Integer> map : freqMap.entrySet()){
+            int freq = map.getValue();
+            Character ch = map.getKey();
+            if(freq > 0){
+                // no need of carrying string as input. like in case of string for every recursive call we reduce char freq in same way
+                // we are reducing char freq. for string aabb for the first time, after first call op = a and input = abb
+                freqMap.put(ch, freq - 1);
+                // duplicates are avoided via map. aabb we need to find permutation for aabb but with only one a and one b. a(abb). if for second a also we create permutations
+                //then it will be duplicate because second a will also generate a(abb). so at same level duplicates should be avoided and this is possible using map as in map
+                // for let's suppose level 0 calls for first 'a' and then after computing all permutation for first 'a', when it comes back to level 0 it will not pick second 'a'
+                // as map.entry will move to next character as character is used as key and so against a - 2 there will be 2 freq but no two keys as 'a'.
+                getPalindromicPermutations(oddChar, freqMap, permutations, op+ch, strLen);
+                freqMap.put(ch, freq);
             }
-            builder.append(local.toString());
-        }
-        String stringToBePermuted = builder.toString();
-        System.out.println(stringToBePermuted);
-        if(odd>1){
-            System.out.println("palindromic partition not possible as odd char are more than 1");
-        }
-        else {
-            getPermutation(stringToBePermuted, new boolean[stringToBePermuted.length()], "", oddChar);
         }
     }
 
-    private static void getPermutation(String str, boolean[] visited, String op, String c1){
-        if(op.length() == str.length()){
-            System.out.println(op+c1+reverse(op));
-            return;
-        }
-        for(int i=0; i<str.length(); i++){
-            if(visited[i]) continue;
-            visited[i]=true;
-            getPermutation(str, visited, op+str.charAt(i), c1);
-            visited[i]=false;
-        }
-    }
     private static String reverse(String s){
         char[] c = s.toCharArray();
         for (int i = 0, j = c.length - 1; i < j; i++, j--) {

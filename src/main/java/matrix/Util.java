@@ -110,4 +110,18 @@ public class Util {
         }
         return m1;
     }
+
+    public static void printMatrix(char[][] a) {
+        int r = a.length;
+        int c = a[0].length;
+
+        for(int i=0; i<r; i++){
+            for(int j=0; j<c; j++){
+                char v  = a[i][j];
+                System.out.print(v+"   ");
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
 }

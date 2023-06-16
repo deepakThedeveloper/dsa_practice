@@ -1,98 +1,37 @@
 package arrays;
 
+import matrix.Util;
+
 public class SetMatrixZero {
     public static void main(String[] args) {
-        int matrix[][] = {{0,1,1}, {1,1,1},{1,1,1}};
-
-        int rows = matrix.length;
-        int col = matrix[0].length;
-        System.out.println("rows:"+rows);
-        System.out.println("columns:"+col);
-        System.out.println("matrix before operations");
-        //firstApproach(matrix);
-        secondApproach(matrix);
-        System.out.println("matrix after operations");
-        for (int i=0; i<rows;i++){
-            for (int j=0; j<col; j++){
-                System.out.print(matrix[i][j]+" ");
-            }
-            System.out.println();
-        }
+        int[][] matrix = {{1,0}, {2,7},{3,0},{4,8}};
+        setZeros(matrix);
+        Util.printMatrix(matrix);
     }
+    public static void setZeros(int[][] matrix) {
+        int n = matrix.length;
+        int m = matrix[0].length;
 
-    private static void secondApproach(int[][] matrix) {
-        int r = matrix.length;
-        int c = matrix[0].length;
-
-        boolean foundZero = false;
-        for(int i=0; i<r; i++){
-            for (int j = 0; j<c; j++){
-                if(matrix[i][j]==0){
-                    setRowColToZero(i, j, matrix, r, c);
-                    foundZero = true;
-                   // break;
-
-                }
-            }
-            if(foundZero){
-                break;
-            }
-        }
-    }
-
-    private static void setRowColToZero(int r, int c, int[][] matrix, int totalRows, int totalCols) {
-        for(int i=0; i<totalCols; i++){
-            matrix[r][i] = 0;
-        }
-        for(int j=0; j<totalRows; j++){
-            matrix[j][c] = 0;
-        }
-    }
-
-    private static void firstApproach(int[][] matrix) {
-        int rows = matrix.length;
-        int col = matrix[0].length;
-        System.out.println("rows:"+rows);
-        System.out.println("columns:"+col);
-        System.out.println("matrix before operations");
-        for (int i=0; i<rows;i++){
-            for (int j=0; j<col; j++){
-                System.out.print(matrix[i][j]+" ");
-            }
-            System.out.println();
-        }
-
-        int rowValue = -1;
-        int colValue = -1;
-        boolean foundMatch = false;
-        for(int i=0; i<rows; i++){
-            for(int j=0; j<col; j++){
+        int col0 = 1;
+        for(int i=0; i<n; i++){
+            for(int j=0; j<m; j++){
                 if(matrix[i][j] == 0){
-                    rowValue = i;
-                    colValue = j;
-                    foundMatch = true;
-                    break;
+                    if(j!=0) matrix[0][j] = 0;
+                    else col0 = 0;
+                    matrix[i][0] = 0;
                 }
             }
-            if (foundMatch) break;
         }
-        for(int i = 0; i<rows; i++){
-            if(rowValue == i){
-                for(int j=0; j<col; j++){
-                    matrix[i][j]=0;
+        for(int i=n-1; i>=0; i--){
+            for(int j=m-1; j>0; j--){
+                if(matrix[i][0] == 0 || matrix[0][j] == 0){
+                    matrix[i][j] = 0;
                 }
             }
-            else {
-                matrix[i][colValue] = 0;
-            }
         }
-        System.out.println("matrix after operations");
-        for (int i=0; i<rows;i++){
-            for (int j=0; j<col; j++){
-                System.out.print(matrix[i][j]+" ");
-            }
-            System.out.println();
+
+        for(int i=0; i<n; i++){
+            if(col0 == 0) matrix[i][0] = 0;
         }
     }
-
 }
