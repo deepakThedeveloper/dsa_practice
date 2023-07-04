@@ -4,7 +4,7 @@ import matrix.Util;
 
 public class StocksBuySell2 {
     public static void main(String[] args) {
-        int[] prices = {7,1,5,3,6,4};
+        int[] prices = {1,3,1,3};
         int maxProfit = maxProfit(0, 1, prices);
         System.out.println("maxProfit recursion:"+maxProfit);
     }

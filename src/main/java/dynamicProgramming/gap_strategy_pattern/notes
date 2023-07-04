@@ -1,0 +1,60 @@
+1. LCS and LPS by striver approach, code base is same. just reverse the original string while doing LPS and use the reversed
+string as string 2;
+2. SummitMallik Approach below
+
+-- LPS = gap strategy
+step1).2D matrix with str length.
+step2).traverse diagonally from 00, 11, 22 .... 03, 14, 04 where n = 5.
+step3). for 1 char 00, 11, 22... value will be 1 in that cell because single char is always palindrome
+step4). for 2 char 01, 12, 23... value will be 1 if characters don't match else if char matches then value will be 2.
+why?
+>>>>ab = -, a, b, ab ------ so at max 1 char will be palindrome either a or b so len = 1.
+>>>>cc = -, c, c, cc ------ so at max 2 char will be palindrome i.e. cc so len = 2
+step5). for more than 2 char,
+>>>> if first and last char matches. i.e. if(s1.charAt(i) == s1.charAt(j)). then get bottom left diagonal val and add 2 to it.
+e.g. dp[i][j] = dp[i+1][j-1] + 2;
+>>>> else take max of prefix and suffix. i.e. dp[i][j] = Math.max(dp[i][j-1], dp[i+1][j]);
+
+-- Count Palindromic subsequence
+step1).2D matrix with str length.
+step2).traverse diagonally from 00, 11, 22 .... 03, 14, 04 where n = 5.
+step3). for 1 char 00, 11, 22... value will be 1 in that cell because single char is always palindrome
+step4). for 2 char 01, 12, 23... value will be 2 if characters don't match else if char matches then value will be 3.
+why?
+>>>>ab = -, a, b, ab ------ so at two char(a. b) are palindrome in ab subsequence so count = 2.
+>>>>cc = -, c, c, cc ------ so 3 chars(c, c, cc) of subsequence cc are palindrome so count = 3
+step5). for more than 2 char,
+>>>> if first and last char matches. i.e. if(s1.charAt(i) == s1.charAt(j)).
+then prefix + suffix val + 1 e.g. dp[i][j] = (dp[i][j-1] + dp[i+1][j]) + 1;
+>>>> else prefix + suffix - middle(bottom left diagonal) e.g.: dp[i][j] = (dp[i][j-1] + dp[i+1][j]) - dp[i+1][j-1];;
+why?
+abc = prefix = ab(a, b), suffix = bc(b, c). middle = b. ab(2)+bc(2)-b(1) = 3;
+
+-- Count Palindromic subsequence
+step1).2D matrix with str length.
+step2).traverse diagonally from 00, 11, 22 .... 03, 14, 04 where n = 5.
+step3). for 1 char 00, 11, 22... value will be 1 in that cell because single char is always palindrome
+step4). for 2 char 01, 12, 23... value will be 2 if characters match or don't match.
+why?
+>>>>ab = -, a, b, ab ------ so at two char(a. b) are palindrome in ab subsequence so count = 2.
+>>>>cc = -, c, c, cc ------ so 3 chars(c, c, cc) of subsequence cc are palindrome but as c is 2 times and we need distinct so count = 2
+step5). for more than 2 char,
+>>>> a----a  - any char between matching first and last char  -- 2dp(middle) + 2. i.e. 2dp[i+1][j-1]+2
+>>>> a-a--a  - single char same as first and last char  -- 2dp(middle) + 1. i.e. 2dp[i+1][j-1]+1
+>>>> a-a-a-a - multiple char same as first and last char   -- 2dp(middle) - dp(middle). i.e. 2dp[i+1][j-1] - dp[nextI+1, beforeJ-1)]
+>>>> abc     - first and last char not match              -- dp(prefix) + dp(suffix)  - dp(middle)
+
+-- Count Palindromic substring
+step1).2D boolean matrix with str length.
+step2).traverse diagonally from 00, 11, 22 .... 03, 14, 04 where n = 5.
+step3). for 1 char 00, 11, 22... value will be true in that cell because single char is always palindrome
+step4). for 2 char 01, 12, 23... value will be false if characters don't match else if char matches then value will be true.
+step5). for more than 2 char,
+>>>> if first and last char matches. i.e. if(s1.charAt(i) == s1.charAt(j)).
+then use value of bottom left diagonal dp[i][j] = dp[i+1][j-1];
+>>>> else dp[i][j] = false;
+step6). carry a count variable and for every dp[i][j] = true increment the counter;
+
+-- Longest Palindromic substring
+Same as Count Palindromic Substring with change in step 6.
+step6). carry a maxLength variable and for every dp[i][j] = true , do maxLength = Math.max(maxLength, (j-i)+1);

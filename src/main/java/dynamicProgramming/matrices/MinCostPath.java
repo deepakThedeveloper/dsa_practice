@@ -8,74 +8,87 @@ import java.util.Queue;
 
 public class MinCostPath {
     public static void main(String[] args) {
-        int[][] a = {{1,2}, {3,4}};
+        int[][] a = {
+                {0,1,4,2},
+                {4,3,6,5},
+                {1,2,4,1},
+                {2,0,7,3}
+        };
+        printTraversalPathOfMinCostPath(a);
 
-        int[][] dp = Util.getMatrix(a.length, a[0].length, -1);
-        int minPath = findMinPathMemoization(a, 0, 0, dp);
-        printMatrix(dp);
-        System.out.println("original memoization:"+minPath);
-
-        int[][] dp1 = Util.getMatrix(a.length, a[0].length, -1);
-        int minPath1 = minCostTraversalMemoizationRevision(a, 0, 0, dp1);
-        printMatrix(dp1);
-        System.out.println("revision memoization:"+minPath1);
-
-        int minPath2 = minCostTraversalTabulationRevision(a);
-        System.out.println("revision tabulation:"+minPath2);
+//        int[][] dp = Util.getMatrix(a.length, a[0].length, -1);
+//        int minPath = findMinPathMemoization(a, 0, 0, dp);
+//        Util.printMatrix(dp);
+//        System.out.println("original memoization:"+minPath);
+//
+//        int[][] dp1 = Util.getMatrix(a.length, a[0].length, -1);
+//        int minPath1 = minCostTraversalMemoizationRevision(a, 0, 0, dp1);
+//        Util.printMatrix(dp1);
+//        System.out.println("revision memoization:"+minPath1);
+//
+//        int minPath2 = minCostTraversalTabulationRevision(a);
+//        System.out.println("revision tabulation:"+minPath2);
     }
 
 
     private static void printTraversalPathOfMinCostPath(int[][] mat){
         int n = mat.length;
         int[][] dp = new int[n][n];
+        dp[n-1][n-1] = mat[n-1][n-1];
 
-        // creating min cost matrix
-        for(int r = n-1; r>=0; r--){
-            for(int c = n-1; c>=0; c--){
-                if(r == n-1 && c == n-1){
-                    dp[n-1][n-1] = mat[n-1][n-1];
-                }
-                else {
-                    if(r+1>=n){
-                        dp[r][c] = dp[r][c]+dp[r][c+1];
-                    }
-                    else if(c+1>=n){
-                        dp[r][c] = dp[r][c]+dp[r+1][c];
-                    }
-                    else{
-                        dp[r][c] = Math.min(dp[r+1][c], dp[r][c+1]) + dp[r][c];
-                    }
-                }
+        for(int c = n-2; c>=0; c--)
+            dp[n-1][c] = mat[n-1][c] + dp[n-1][c+1];
+        for(int r = n-2; r>=0; r--)
+            dp[r][n-1] = mat[r][n-1] + dp[r+1][n-1];
+
+        for(int r = n-2; r>=0; r--){
+            for(int c = n-2; c>=0; c--){
+                dp[r][c] = Math.min(dp[r][c+1],dp[r+1][c]) + mat[r][c];
             }
         }
+        System.out.println("direct tabulation");
+        Util.printMatrix(dp);
+        System.out.println("min cost:"+dp[0][0]);
 
-        //applying BFS to find path from 0,0 to n-1, n-1
-        //todo: will do later. need to work on bfs part
+        printPath(mat, dp);
+    }
+
+    private static void printPath(int[][] mat, int[][] dp){
+        int rows = mat.length, cols = mat[0].length;
         Queue<Pair> queue = new LinkedList<>();
-        Pair pair = new Pair(0,0,'s');
-        queue.add(pair);
+        queue.add(new Pair(0, 0, "S"));
 
         while(!queue.isEmpty()){
-            Pair cur = queue.poll();
-            int r=cur.r, c=cur.c;
-            System.out.println(cur.pos);
-            if(r+1<n || c+1<n && dp[r][c+1] < dp[r+1][c]){
-                queue.add(new Pair(r, c+1, 'r'));
+            Pair pair = queue.poll();
+            int r = pair.r, c = pair.c;
+            if(r == rows-1 && c == cols-1){
+                System.out.println(pair.pos);
+                continue;
             }
-            else if(r+1<n || c+1<n && dp[r][c+1] > dp[r+1][c]){
-                queue.add(new Pair(r+1, c, 'd'));
+            if(c+1>=cols){
+                queue.add(new Pair(r+1, c, pair.pos +"V"));
+            }
+            else if(r+1 >= rows){
+                queue.add(new Pair(r, c+1, pair.pos +"H"));
+            }
+            else if(dp[r][c+1] < dp[r+1][c]){
+                queue.add(new Pair(r, c+1, pair.pos +"H"));
+            }
+            else if(dp[r][c+1] > dp[r+1][c]) {
+                queue.add(new Pair(r+1, c, pair.pos +"V"));
             }
             else{
-                queue.add(new Pair(r, c+1, 'r'));
-                queue.add(new Pair(r+1, c, 'd'));
+                queue.add(new Pair(r, c+1, pair.pos +"H"));
+                queue.add(new Pair(r+1, c, pair.pos +"V"));
             }
         }
     }
+
     @AllArgsConstructor
     static class Pair{
         int r;
         int c;
-        char pos;
+        String pos;
     }
 
 
@@ -96,20 +109,8 @@ public class MinCostPath {
             }
         }
 
-        printMatrix(dp);
+        Util.printMatrix(dp);
         return dp[0][0];
-    }
-
-    private static void printMatrix(int[][] dp){
-        int r = dp.length;
-        int c = dp[0].length;
-        for(int i=0; i< r; i++){
-            for(int j=0; j<c; j++){
-                System.out.print(dp[i][j]+" ");
-            }
-            System.out.println();
-        }
-        System.out.println();
     }
 
     private static int minCostTraversalMemoizationRevision(int[][] mat, int sr, int sc, int[][] dp) {

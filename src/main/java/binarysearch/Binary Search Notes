@@ -1,0 +1,23 @@
+1. while loop condition low<=high
+2. during traversal, low = mid + 1 and high = mid -1
+3. in rotated array to avoid overflow or out of bound do, (low + N - 1) % N and (high + 1) % N
+4. in nearly sorted check ele with mid, mid - 1, mid + 1, reason being nearly sorted means element at i can be at i or i - 1 or i + 1
+5. while checking with mid - 1 or mid + 1 check out of bound condition like mid > low and mid < high
+6. Min element in rotated sorted array will be such where a[mid] < a[mid-1] and a[mid+1]
+7. While finding min element as array is sorted but rotated, so whole array will not be sorted but atleast left of any mid will be sorted
+or right of any mid will be sorted always. so we need to check for min in not sorted portion
+8. While searching element in rotated sorted array,
+-- find min element  (left portion of min and right of min will always we sorted)
+-- apply normal binary search from (0-min(index)-1) and (min(index) - arr.length-1) separately
+9.  finding first and last occurrence or finding floor and ceil
+-- update the result variable while traversing with better results. e.g : at mid we found match, we will add mid value in result and
+continue traversing left or right. as and when we traverse just keep on updating the result and at last return result.
+-- no special condition or change is needed in normal binary search code
+10. when lower and upper values of a character or word needs to found like prev and next char or first and last occurrence then the
+condition for traversing for first occurrence or prev char is (a[mid] >= element) high = mid - 1 and viceversa for last occurrence
+11. when we need to exclude the element that needs to be searched and need to find lower and upper side of it e.g.: prev and next char
+in such case condition like if(a[mid] == ele) is not needed because we don't need that element to be searched or its index. we can skip it
+12. Dealing with infinite sorted array, we need to know low and high value index to apply any binary search algo
+-- assume low = 0 and try searching for high. create a method that will return new low and high to it
+----- take low as 0 and high as 1 and check if ele > high. if yes then low = high and high = high * 2. till a[high} > ele. return new low and high
+-- once you have new low and high apply any binary search variant like search, first last occurrence anything based on question

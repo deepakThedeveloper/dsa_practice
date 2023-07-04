@@ -16,10 +16,41 @@ public class MinAsciiDeleteToMakeStringEqual {
 //        System.out.println();
 //        System.out.println("memo:"+minAsciiDeletion1);
 
-        int minAsciiDeletion1 = minAsciiDeletionTabulationApproach2(s1, s2);
+        int minAsciiDeletion1 = minAsciiDeletionTabulationDirect(s1, s2);
         System.out.println();
         System.out.println("tabulation:"+minAsciiDeletion1);
+    }
 
+    private static int minAsciiDeletionTabulationDirect(String s1, String s2){
+        int n = s1.length();
+        int m = s2.length();
+
+        int[][] dp = Util.getMatrix(n+1, m+1, 0);
+        for(int r=dp.length-1; r>=0; r--){
+            for(int c=dp[0].length-1; c>=0; c--){
+                if(r==dp.length-1 && c==dp[0].length-1){
+                    dp[r][c] = 0;
+                }
+                else if(r==dp.length-1){
+                    dp[r][c] = (int)s2.charAt(c) + dp[r][c+1];
+                }
+                else if(c==dp[0].length-1){
+                    dp[r][c] = (int)s1.charAt(r) + dp[r+1][c];
+                }
+                else{
+                    if(s1.charAt(r) == s2.charAt(c)){
+                        dp[r][c] = dp[r+1][c+1];
+                    }
+                    else {
+                        dp[r][c] = Math.min((int)s1.charAt(r) + dp[r + 1][c],
+                                (int)s2.charAt(c)+dp[r][c + 1]);
+                    }
+                }
+            }
+        }
+        Util.printMatrix(dp);
+        System.out.println();
+        return dp[0][0];
     }
 
     private static int minAsciiDeletionToMakeStringEqualTabulation(String s1, String s2){
@@ -89,37 +120,5 @@ public class MinAsciiDeleteToMakeStringEqual {
             int s2Traverse = minAsciiDeletionToMakeStringEqualMemo(i, s1, j-1, s2, dp) + (int)s2.charAt(j);
             return dp[i][j] = Math.min(s1Traverse, s2Traverse);
         }
-    }
-
-    //todo: incorrect answer. need to work on
-    private static int minAsciiDeletionTabulationApproach2(String s1, String s2){
-        int n = s1.length();
-        int m = s2.length();
-
-        int[][] dp = Util.getMatrix(n+1, m+1, 0);
-        char ch1 = s1.charAt(0);
-        char ch2 = s2.charAt(0);
-        //dp[0][0] = ch1 == ch2 ? 0 : (int)ch1 + (int)ch2;
-        for(int c=1; c<=m; c++){
-            dp[0][c] = dp[0][c-1]+s1.charAt(c-1);
-        }
-        for(int r=1; r<=n; r++){
-            dp[r][0] = dp[r][0]+s2.charAt(r-1);
-        }
-        for(int r=1; r<=n; r++){
-            for(int c=1; c<=m; c++){
-                if(s1.charAt(r-1) == s2.charAt(c-1)){
-                    dp[r][c] = dp[r-1][c-1];
-                }
-                else{
-                    int s1Traverse = dp[r-1][c] + (int)s1.charAt(r-1);
-                    int s2Traverse = dp[r][c-1] + (int)s2.charAt(c-1);
-                    dp[r][c] = Math.min(s1Traverse, s2Traverse);
-                }
-            }
-        }
-        Util.printMatrix(dp);
-        System.out.println();
-        return dp[n][m];
     }
 }

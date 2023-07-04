@@ -1,0 +1,11 @@
+--include exclude technique
+--at row level there are options either given in pblm or else incl and excl. These are not to be considered as an actual
+value of rows.
+-- What this technique tells is when traversing from left to right, when inserting data in particular cell/ column, compare
+all the values that are at row level and select any one of those. i.e. include any one value and exclude other value.
+e.g.: in case of maxSumNonAdjSubset... either we are including that value or exlcuding. i.e. take or not take and if include a value
+then we need to exclude value which is present at 2nd row i.e. dp[1] and if including the excluded value i.e. dp[1] then excluding the
+included value i.e. dp[0]
+-- similar is the case of paint house where if 1 house has 3 prices for 3 colors red, green and blue in that case for other house
+if we need to select red then we need to exclude red of first house and take max of blue or green of first house and add it to
+red price of second house

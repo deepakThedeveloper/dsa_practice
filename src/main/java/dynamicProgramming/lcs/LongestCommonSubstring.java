@@ -7,27 +7,32 @@ public class LongestCommonSubstring {
         String s1 = "abcjklpmnpqrstu";
         String s2 = "acjklppqrstuv";
 
-        int count = getLCSTabulation(s1.toCharArray(), s2.toCharArray(), s1.length(), s2.length());
+        int count = getLCSTabulationDirect(s1.toCharArray(), s2.toCharArray(), s1.length(), s2.length());
         System.out.println(count);
 
         int lcSubstring2 = lcsViaTabulationRevision(s1, s2);
         System.out.println("tabulation:"+lcSubstring2);
     }
 
-    private static int getLCSTabulation(char[] c1, char[] c2, int n, int m){
+    /*
+    2D int matrix. on x-axis is c1, and y-axis is c2
+    c1[i] == c2[j] then dp[i][j] = dp[i-1][j-1] + 1 else 0;
+    while filling the dp carry maxLength and fill it with maxLength
+     */
+    private static int getLCSTabulationDirect(char[] c1, char[] c2, int n, int m){
         int[][] dp = new int[n+1][m+1];
 
-        int count = 0;
+        int maxLength = 0;
         for(int i=0, i1=1; i<n; i++, i1++){
             for(int j=0, j1=1; j<m; j++, j1++){
                 if(c1[i] == c2[j]){
                     dp[i1][j1] = 1 + dp[i1-1][j1-1];
-                    count = Math.max(dp[i1][j1],count);
+                    maxLength = Math.max(dp[i1][j1],maxLength);
                 }
             }
         }
 
-        return count;
+        return maxLength;
     }
 
     // Approach 2: Code looks neat and clean but comes with additional space

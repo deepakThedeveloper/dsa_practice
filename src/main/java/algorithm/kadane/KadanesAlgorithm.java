@@ -7,8 +7,8 @@ public class KadanesAlgorithm {
         System.out.println(max);
     }
     public static long maxSubarraySum(int[] arr, int n) {
-        long sum = 0l;
-        long max = -1l;
+        long sum = 0L;
+        long max = Long.MIN_VALUE;
         for(int i=0; i<n; i++){
             sum += arr[i];
             if(sum < 0) {

@@ -9,10 +9,54 @@ import java.util.Queue;
 //0 - empty, 1 - fresh orange, 2 - rotten orange :: need to find time required to rotten all oranges
 public class RottenOranges {
     public static void main(String[] args) {
-        int[][] mat = {{0,1,2},{0,1,2},{2,1,1}};
-        int sr  = 0, sc = 0;
-        int time = rottenOrangesBFS(mat, sr, sc);
+        int[][] mat = {{0,1,2,1},{0,1,2,1},{2,1,1,0}};
+        int time = rottenOrangesBFS(mat, 0, 0);
         System.out.println("time taken bfs:"+time);
+
+
+        int[][] mat1 = {{0,1,2,1},{0,1,2,1},{2,1,1,0}};
+        Util.printMatrix(mat1);
+        int time1 = rottenOrangesBFSOtherApproach(mat1);
+        Util.printMatrix(mat1);
+        System.out.println("time taken bfs other approach:"+time1);
+    }
+
+    private static int rottenOrangesBFSOtherApproach(int[][] m1){
+        Queue<Data> qu = new LinkedList<>();
+        int n = m1.length, m = m1[0].length;
+        for(int i=0; i<n; i++){
+            for(int j=0; j<m; j++){
+                if(m1[i][j] == 2) qu.add(new Data(i, j));
+            }
+        }
+
+        int time = 0;
+        boolean isAvailable;
+        int[] x = {-1, 0, 1, 0};
+        int[] y = {0, 1, 0, -1};
+
+        while(!qu.isEmpty()){
+            int size = qu.size();
+            isAvailable = false;
+            for(int i=0; i<size; i++) {
+                Data data = qu.poll();
+                int r = data.i, c = data.j;
+
+                for (int k = 0; k < 4; k++) {
+                    int newI = r + x[k];
+                    int newJ = c + y[k];
+
+                    if (newI >= 0 && newI < n && newJ >= 0 && newJ < m
+                            && m1[newI][newJ] == 1){
+                        m1[newI][newJ] = 2;
+                        qu.add(new Data(newI, newJ));
+                        isAvailable = true;
+                    }
+                }
+            }
+            if(isAvailable) time++;
+        }
+        return time;
     }
 
     private static int rottenOrangesBFS(int[][] m1, int sr, int sc) {
@@ -63,5 +107,11 @@ public class RottenOranges {
         int i;
         int j;
         int time;
+    }
+
+    @AllArgsConstructor
+    static class Data{
+        int i;
+        int j;
     }
 }

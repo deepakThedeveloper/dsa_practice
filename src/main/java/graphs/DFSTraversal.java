@@ -11,12 +11,12 @@ public class DFSTraversal {
         dfsTraversal(graph, sr, new boolean[vertices]);
     }
 
-    private static void dfsTraversal(List<List<Integer>> graph, int v, boolean[] visited){
-        visited[v] = true;
-        System.out.print(v+" ");
-        for(Integer nbrs : graph.get(v)){
-            if(!visited[nbrs])
-            dfsTraversal(graph, nbrs, visited);
+    private static void dfsTraversal(List<List<Integer>> graph, int sr, boolean[] visited){
+        visited[sr] = true;
+        System.out.print(sr+", ");
+        for(Integer nbr : graph.get(sr)){
+            if(!visited[nbr])
+                dfsTraversal(graph, nbr, visited);
         }
     }
 }

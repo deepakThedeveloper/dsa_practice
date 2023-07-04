@@ -30,13 +30,18 @@ public class LargestCommonSubsequence {
 
     //refer: /resources/longest_common_subsequence.jpg
     private static int lcsApproach2(String s1, String s2){
+        // +1 because in case of subsequence blank or empty string "" is also a subsequence
         int[][] dp = new int[s1.length()+1][s2.length()+1];
 
         for(int i=s1.length()-1; i>=0; i--){
             for(int j=s2.length()-1; j>=0; j--){
+
+                // both char match b==b of string acb, adb .. then look diagonal and what ever value is present in diagonal
+                // dp[i+1][j+1] , 1 should be added to it
                 if(s1.charAt(i) == s2.charAt(j)){
                     dp[i][j] = dp[i+1][j+1]+1;
                 }
+                // it c==b i.e. value mismatch then take max of (dp[r][c+1], dp[r+1][c])
                 else{
                     dp[i][j] = Math.max(dp[i][j+1], dp[i+1][j]);
                 }

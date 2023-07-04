@@ -16,8 +16,58 @@ public class ShortestCommonSupersequence {
         System.out.println("tabulation revision:"+lcs2);
         int scs2 = s1.length()+s2.length()-lcs2;
         System.out.println("shortest common super sequence tabulation:"+scs2);
+
+        printSCSDirectApproach(s1, s2);
     }
 
+    // find LCS >> traverse the tabulation matrix from bottom to top to print shortest common supersequence
+    private static void printSCSDirectApproach(String s1, String s2){
+        int n = s1.length(), m = s2.length();
+        int[][] dp = new int[n+1][m+1];
+
+        for(int r=1; r<=n; r++){
+            for(int c=1; c<=m; c++){
+                if (s1.charAt(r-1) == s2.charAt(c-1)) {
+                    dp[r][c] = dp[r-1][c-1]+1;
+                }
+                else{
+                    dp[r][c] = Math.max(dp[r-1][c], dp[r][c-1]);
+                }
+            }
+        }
+
+        int minSCSLength = n+m-dp[n][m];
+        System.out.println("LCS:" +dp[n][m]+"Min SCS Length:"+minSCSLength);
+
+        StringBuilder builder = new StringBuilder();
+        int r=n, c=m;
+        while(r>0 && c>0){
+            if(s1.charAt(r - 1) == s2.charAt(c - 1)){
+                builder.insert(0, ""+s1.charAt(r-1));
+                r--;
+                c--;
+            }
+            else{
+                if(dp[r - 1][c] >= dp[r][c - 1]){
+                    builder.insert(0, ""+s1.charAt(r-1));
+                    r--;
+                }
+                else{
+                    builder.insert(0, ""+s2.charAt(c-1));
+                    c--;
+                }
+            }
+        }
+        while(r>0){
+            builder.insert(0, ""+s1.charAt(r-1));
+            r--;
+        }
+        while(c>0){
+            builder.insert(0, ""+s2.charAt(c-1));
+            c--;
+        }
+        System.out.println("Shortest Common Supersequence:"+builder.toString());
+    }
 
     private static int lcsMemoizationRevision(String s1, int i1, String s2, int i2, int[][] dp) {
         if (i1 < 0 || i2 < 0) return 0;
@@ -48,7 +98,7 @@ public class ShortestCommonSupersequence {
         }
         Util.printMatrix(dp);
 
-        printSCS(s1, s2, dp);
+        printSCSDirectApproach(s1, s2, dp);
         return dp[i1][i2];
     }
 
@@ -59,7 +109,7 @@ public class ShortestCommonSupersequence {
     // that row char. similarly if we are moving horizontal then we are moving one col to left and so we are adding
     // current col. at the end there is a possibility that we reach to 0 index of either row or col and other section is not
     //traversed and so in such case below are two while loops
-    private static void printSCS(String s1, String s2, int[][] dp){
+    private static void printSCSDirectApproach(String s1, String s2, int[][] dp){
         StringBuilder str = new StringBuilder();
         int i=dp.length-1, j=dp[0].length-1;
         while(i>0 && j>0){

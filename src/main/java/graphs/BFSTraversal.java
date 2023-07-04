@@ -22,22 +22,40 @@ public class BFSTraversal {
 
     // sc: O(3N) and tc: O(N) + O(2E)  ---- 2E is twice of edges which is degree. i.e. degree = 2E because outer while loop is executing for n time and inner loop
     // is for all the neighbour nodes
+//    private static void bfsUsingListOfList(List<List<Integer>> graph, int sr){
+//        Queue<Integer> queue = new LinkedList<>();
+//        boolean[] visited = new boolean[graph.size()];
+//        queue.add(sr);
+//        visited[sr] = true;
+//        while(!queue.isEmpty()){
+//            Integer v = queue.poll();
+//            System.out.print(v+" ");
+//            List<Integer> nbrs = graph.get(v);
+//            for(Integer nb : nbrs){
+//                if(!visited[nb]) {
+//                    visited[nb] = true;
+//                    queue.add(nb);
+//                }
+//            }
+//        }
+//    }
     private static void bfsUsingListOfList(List<List<Integer>> graph, int sr){
-        Queue<Integer> queue = new LinkedList<>();
-        boolean[] visited = new boolean[graph.size()];
-        queue.add(sr);
-        visited[sr] = true;
-        while(!queue.isEmpty()){
-            Integer v = queue.poll();
-            System.out.print(v+" ");
-            List<Integer> nbrs = graph.get(v);
-            for(Integer nb : nbrs){
-                if(!visited[nb]) {
-                    visited[nb] = true;
-                    queue.add(nb);
-                }
-            }
-        }
+       Queue<Integer> qu =  new LinkedList<>();
+       boolean[] vis = new boolean[graph.size()];
+
+       qu.add(sr);
+       vis[sr] = true;
+       while(!qu.isEmpty()){
+           Integer node = qu.poll();
+           System.out.print(node+", ");
+
+           for(Integer nbr : graph.get(node)){
+               if (!vis[nbr]) {
+                   vis[nbr] = true;
+                   qu.add(nbr);
+               }
+           }
+       }
     }
 
     private static void bfsTraversal(ArrayList<Edge>[] edges, int sr, int vertex){
